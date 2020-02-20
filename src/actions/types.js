@@ -1,0 +1,4 @@
+export const DRUM_PAD_SELECTED = "DRUM_PAD_SELECTED";
+export const BANK_SELECTED = "BANK_SELECTED";
+export const SLIDER_VOLUME = "SLIDER_VOLUME";
+export const POWER_STATUS = "POWER_STATUS";
