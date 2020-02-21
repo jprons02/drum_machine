@@ -14,30 +14,39 @@ class DrumPad extends React.Component {
         audioElement.play();
     }
     */
-    componentDidMount() {
-        //key press listener function.
-        return null;
-    }
+    
+    componentDidMount = () => document.addEventListener('keydown', this.keyPressed);
 
     componentDidUpdate() {
         this.getSrc();
-        if(this.getSrc()) {
-            const audioElement = document.getElementById(this.props.selectedDrumPad.keyTrigger);
-            audioElement.currentTime = 0;
-            audioElement.play();
+        this.playSound(this.getSrc());
+    }
+
+    keyPressed = (e) => {
+        console.log(this.props.drumSamples);
+        for(let drumSample of this.props.drumSamples) {
+            if(e.keyCode == drumSample.keyCode) {
+                this.props.selectDrumPad(drumSample);
+            }
         }
     }
     
     getSrc = () => {
-        const audioElement = document.getElementById(this.props.selectedDrumPad.keyTrigger);
         //loop through all banks to return which is equal to the bank state.
-        
         if(this.props.selectedDrumPad.bank) {
             for (let bank of this.props.selectedDrumPad.bank) {
                 if(bank.bankNumber == this.props.selectedBank) {
                     return bank.url;
                 }
             }
+        }
+    }
+
+    playSound = (src) => {
+        if(src) {
+            const audioElement = document.getElementById(this.props.selectedDrumPad.keyTrigger);
+            audioElement.currentTime = 0;
+            audioElement.play();
         }
     }
     
@@ -52,8 +61,8 @@ class DrumPad extends React.Component {
                         key={drumSample.bank[0].id}
                         className="drum-pad"
                     >
-                    {drumSample.keyTrigger}
-                    <audio className="clip" id={drumSample.keyTrigger} src={this.getSrc() || null} />
+                        {drumSample.keyTrigger}
+                        <audio className="clip" id={drumSample.keyTrigger} src={this.getSrc() || null} />
                     </div>
                 );
             })
