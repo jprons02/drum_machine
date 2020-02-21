@@ -145,7 +145,7 @@ const drumSamplesReducer = () => {
 
 
 
-const selectedDrumPadReducer = (selectedDrumPad={}, action, state) => {
+const selectedDrumPadReducer = (selectedDrumPad={}, action) => {
     if(action.type === DRUM_PAD_SELECTED) {
         return action.payload;
     }

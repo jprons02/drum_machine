@@ -2,9 +2,11 @@ import React from "react";
 import { connect } from "react-redux";
 import { selectDrumPad } from "../actions"
 
-const DrumPad = (props) => {
+class DrumPad extends React.Component {
 
-    
+    constructor(props) {
+        super(props);
+    }
     /*
     const audioElement = document.getElementById(drumSample.keyTrigger);
     const playSound = () => {
@@ -12,59 +14,71 @@ const DrumPad = (props) => {
         audioElement.play();
     }
     */
-    
-    
+    componentDidMount() {
+        //key press listener function.
+        return null;
+    }
 
-    const renderDrumPads = () => {
-        console.log(props);
-        const selectDrumPad = (drumSample) => {
-            
-            props.selectDrumPad(drumSample);
-            console.log("props within renderDrumPads function keyTrigger: " + props.state.selectedDrumPad.keyTrigger);
+    componentDidUpdate() {
+        this.getSrc();
+        if(this.getSrc()) {
+            const audioElement = document.getElementById(this.props.selectedDrumPad.keyTrigger);
+            audioElement.currentTime = 0;
+            audioElement.play();
         }
+    }
+    
+    getSrc = () => {
+        const audioElement = document.getElementById(this.props.selectedDrumPad.keyTrigger);
+        //loop through all banks to return which is equal to the bank state.
         
+        if(this.props.selectedDrumPad.bank) {
+            for (let bank of this.props.selectedDrumPad.bank) {
+                if(bank.bankNumber == this.props.selectedBank) {
+                    return bank.url;
+                }
+            }
+        }
+    }
+    
 
+    renderDrumPads = () => {
+        
         return (
-            props.state.drumSamples.map((drumSample) => {
+            this.props.drumSamples.map((drumSample) => {
                 return (
                     <div 
-                        onClick={() => selectDrumPad(drumSample)}
+                        onClick={() => this.props.selectDrumPad(drumSample)}
                         key={drumSample.bank[0].id}
                         className="drum-pad"
                     >
                     {drumSample.keyTrigger}
-                    <audio className="clip" id={drumSample.id} src={drumSample.url} />
+                    <audio className="clip" id={drumSample.keyTrigger} src={this.getSrc() || null} />
                     </div>
                 );
             })
         )
     }
 
-    return (
-        <div>
-            {renderDrumPads()}
-        </div>
-    )
+    render() {
+        return (
+            <div>
+                {this.renderDrumPads()}
+            </div>
+        )
+    }
 };
 
 
+//use ownProps to pass so that when componentDidUpdate fires it only fires onClick 
+//because the only state that changes is selectedDrumPad
 const mapStateToProps = (state, ownProps) => {
-    
-    const { selectedDrumPad, selectedBank, sliderVolume, poweredOn } = ownProps
-    return { state, poweredOn, sliderVolume };
-    //return {state, ownProps}
+    const { selectedDrumPad, drumSamples } = state;
+    const { selectedBank, volumeSlider, poweredOn } = ownProps;
+
+    return { selectedDrumPad, drumSamples, selectedBank, volumeSlider, poweredOn };
 }
 
-/*
-function mapStateToProps(state, ownProps) {
-  const { visibilityFilter } = state
-  const { id } = ownProps
-  const todo = getTodoById(state, id)
-
-  // component receives additionally:
-  return { todo, visibilityFilter }
-}
-*/
 
 export default connect(
     mapStateToProps,

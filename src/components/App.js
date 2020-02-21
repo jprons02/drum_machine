@@ -1,13 +1,23 @@
 import React from "react";
-import DrumPad from "./DrumPad"
 
-const App = () => {
+import DrumPad from "./DrumPad"
+import { connect } from "react-redux";
+
+const App = (props) => {
     return (
         <div className="container-fluid">
             <div>Hello from App component.</div>
-            <DrumPad />
+            <DrumPad 
+                selectedBank={props.selectedBank}
+                volumeSlider={props.volumeSlider}
+                poweredOn={props.poweredOn}
+            />
         </div>
     );
 }
 
-export default App;
+const mapStateToProps = (state) => { 
+    return state;
+}
+
+export default connect(mapStateToProps)(App);
