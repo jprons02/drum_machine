@@ -1,7 +1,7 @@
 import { DRUM_PAD_SELECTED, BANK_SELECTED, SLIDER_VOLUME, POWER_STATUS } from "./types";
 
 
-export const selectDrumPad = (drumPad, state) => {
+export const selectDrumPad = (drumPad) => {
     return {
         type: DRUM_PAD_SELECTED,
         payload: drumPad

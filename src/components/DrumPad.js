@@ -4,6 +4,7 @@ import { selectDrumPad } from "../actions"
 
 const DrumPad = (props) => {
 
+    
     /*
     const audioElement = document.getElementById(drumSample.keyTrigger);
     const playSound = () => {
@@ -15,22 +16,19 @@ const DrumPad = (props) => {
     
 
     const renderDrumPads = () => {
-        const selectDrumPad = (drumSample, props) => {
+        console.log(props);
+        const selectDrumPad = (drumSample) => {
+            
             props.selectDrumPad(drumSample);
-            console.log(drumSample);
-            getState();
+            console.log("props within renderDrumPads function keyTrigger: " + props.state.selectedDrumPad.keyTrigger);
         }
-        //testing...
-        const getState = () => {
-            console.log(props);
-        }
-
+        
 
         return (
-            props.drumSamples.map((drumSample) => {
+            props.state.drumSamples.map((drumSample) => {
                 return (
                     <div 
-                        onClick={() => selectDrumPad(drumSample, props)}
+                        onClick={() => selectDrumPad(drumSample)}
                         key={drumSample.bank[0].id}
                         className="drum-pad"
                     >
@@ -50,10 +48,23 @@ const DrumPad = (props) => {
 };
 
 
-const mapStateToProps = state => {
-    //console.log(state);
-    return state;
+const mapStateToProps = (state, ownProps) => {
+    
+    const { selectedDrumPad, selectedBank, sliderVolume, poweredOn } = ownProps
+    return { state, poweredOn, sliderVolume };
+    //return {state, ownProps}
 }
+
+/*
+function mapStateToProps(state, ownProps) {
+  const { visibilityFilter } = state
+  const { id } = ownProps
+  const todo = getTodoById(state, id)
+
+  // component receives additionally:
+  return { todo, visibilityFilter }
+}
+*/
 
 export default connect(
     mapStateToProps,
