@@ -7,19 +7,15 @@ class DrumPad extends React.Component {
     constructor(props) {
         super(props);
     }
-    /*
-    const audioElement = document.getElementById(drumSample.keyTrigger);
-    const playSound = () => {
-        audioElement.currentTime = 0;
-        audioElement.play();
-    }
-    */
     
     componentDidMount = () => document.addEventListener('keydown', this.keyPressed);
 
     componentDidUpdate() {
+        
         this.getSrc();
-        this.playSound(this.getSrc());
+        if(this.getSrc()) {
+            this.playSound(this.getSrc());
+        } 
     }
 
     keyPressed = (e) => {
@@ -36,7 +32,8 @@ class DrumPad extends React.Component {
         if(this.props.selectedDrumPad.bank) {
             for (let bank of this.props.selectedDrumPad.bank) {
                 if(bank.bankNumber == this.props.selectedBank) {
-                    return bank.url;
+                    //console.log(bank);
+                    return bank;
                 }
             }
         }
@@ -46,8 +43,26 @@ class DrumPad extends React.Component {
         if(src) {
             const audioElement = document.getElementById(this.props.selectedDrumPad.keyTrigger);
             audioElement.currentTime = 0;
-            audioElement.play();
+            
+            var playPromise = audioElement.play();
+            
+            //promise applied due to error
+            //https://developers.google.com/web/updates/2017/06/play-request-was-interrupted
+            if (playPromise !== undefined) {
+                playPromise
+                .then(_ => {
+                    // Automatic playback started!
+                    // Show playing UI.
+                    console.log("audio played auto");
+                })
+                .catch(error => {
+                    // Auto-play was prevented
+                    // Show paused UI.
+                    console.log("playback prevented");
+                });
+            }
         }
+
     }
     
 
@@ -58,11 +73,11 @@ class DrumPad extends React.Component {
                 return (
                     <div 
                         onClick={() => this.props.selectDrumPad(drumSample)}
-                        key={drumSample.bank[0].id}
+                        key={drumSample.keyTrigger}
                         className="drum-pad"
                     >
                         {drumSample.keyTrigger}
-                        <audio className="clip" id={drumSample.keyTrigger} src={this.getSrc() || null} />
+                        <audio className="clip" id={drumSample.keyTrigger} src={this.getSrc() ? this.getSrc().url : null} />
                     </div>
                 );
             })
