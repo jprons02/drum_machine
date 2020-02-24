@@ -1,0 +1,107 @@
+body {
+    height: 100vh;
+    width: 100vw;
+    font-family: 'Roboto', sans-serif;
+  }
+  
+  .container {
+    padding: 20px;
+  }
+  
+  
+  #drum-machine {
+    transform: translateY(0%);
+    box-shadow: 0 19px 38px rgba(0,0,0,0.30), 0 15px 12px rgba(0,0,0,0.22);
+    background-color: #e6e6e6;
+  }
+  
+  .drum-pad-area {
+    display: inline-block;
+    margin: auto;
+    padding: 40px;
+    text-align: center;
+  }
+  
+  
+  .display {
+    display: inline-block;
+    text-align: center;
+    padding-bottom: 25px;
+  }
+  
+  .drum-pad-col{
+    padding: 0;
+  }
+  
+  .drum-pad {
+    border-radius: 0;
+    text-align: center;
+    height: 100px;
+    width: 90%;
+    margin-bottom: 15px;
+    cursor: pointer;
+    line-height: 5.5;
+    box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
+  }
+  
+  .keyboard-key {
+    margin-top: 40px;
+  }
+  
+  .display-text {
+    border: 1px solid grey;
+    margin: auto;
+    width: 65%;
+    height: 50px;
+    background-color: grey;
+    margin-bottom: 10px;
+  }
+  @media screen and (min-width: 991px) {
+    .display-text {
+      margin-top: 120px;
+    }
+  }
+  
+  .display-text p {
+    text-align: center;
+    margin-top: 12px;
+    color: white;
+  }
+  
+  .power {
+    position: fixed;
+    top: 5px;
+    right: 2px;
+  }
+  
+  .custom-switch .custom-control-label::after, 
+  .custom-switch .custom-control-label::before {
+    cursor: pointer;
+  }
+  
+  .form-control-range {
+    cursor: pointer;
+  }
+  
+  .bank-buttons {
+    margin-bottom: 15px;
+  }
+  
+  .bank1, .bank2 {
+    border-radius: 0;
+  }
+  
+  .volume-output {
+    font-size: 12px;
+  }
+  
+  .form-control-range {
+    width: 50%;
+    margin: auto;
+  }
+  
+  .active-key-press {
+    color: #fff;
+    background-color: #0062cc;
+    border: 4px solid pink;
+  }

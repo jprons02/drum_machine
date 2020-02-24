@@ -167,7 +167,6 @@ const volumeSliderReducer = (volume=50, action) => {
     if(action.type === SLIDER_VOLUME) {
         return action.payload;
     }
-
     return volume;
 }
 
@@ -176,7 +175,6 @@ const poweredOnReducer = (power=false, action) => {
     if(action.type === POWER_STATUS) {
         return action.payload;
     }
-
     return power;
 }
 

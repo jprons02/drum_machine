@@ -9,7 +9,7 @@ export const selectDrumPad = (drumPad) => {
 };
 
 
-export const selectedBank = bank => {
+export const selectBank = bank => {
     return {
         type: BANK_SELECTED,
         payload: bank
@@ -17,7 +17,7 @@ export const selectedBank = bank => {
 };
 
 
-export const sliderVolume = volume => {
+export const slideVolume = volume => {
     return {
         type: SLIDER_VOLUME,
         payload: volume
@@ -25,7 +25,7 @@ export const sliderVolume = volume => {
 };
 
 
-export const poweredOn = power => {
+export const togglePower = power => {
     return {
         type: POWER_STATUS,
         payload: power

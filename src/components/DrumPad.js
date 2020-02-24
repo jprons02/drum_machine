@@ -3,25 +3,18 @@ import { connect } from "react-redux";
 import { selectDrumPad } from "../actions"
 
 class DrumPad extends React.Component {
-
-    constructor(props) {
-        super(props);
-    }
     
     componentDidMount = () => document.addEventListener('keydown', this.keyPressed);
 
     componentDidUpdate() {
-        
-        this.getSrc();
         if(this.getSrc()) {
             this.playSound(this.getSrc());
         } 
     }
 
     keyPressed = (e) => {
-        console.log(this.props.drumSamples);
         for(let drumSample of this.props.drumSamples) {
-            if(e.keyCode == drumSample.keyCode) {
+            if(e.keyCode === drumSample.keyCode) {
                 this.props.selectDrumPad(drumSample);
             }
         }
@@ -31,8 +24,7 @@ class DrumPad extends React.Component {
         //loop through all banks to return which is equal to the bank state.
         if(this.props.selectedDrumPad.bank) {
             for (let bank of this.props.selectedDrumPad.bank) {
-                if(bank.bankNumber == this.props.selectedBank) {
-                    //console.log(bank);
+                if(bank.bankNumber === this.props.selectedBank) {
                     return bank;
                 }
             }
@@ -42,12 +34,13 @@ class DrumPad extends React.Component {
     playSound = (src) => {
         if(src) {
             const audioElement = document.getElementById(this.props.selectedDrumPad.keyTrigger);
-            audioElement.currentTime = 0;
             
-            var playPromise = audioElement.play();
+            //resets audio to allow spam keypress
+            audioElement.currentTime = 0;
             
             //promise applied due to error
             //https://developers.google.com/web/updates/2017/06/play-request-was-interrupted
+            let playPromise = audioElement.play();
             if (playPromise !== undefined) {
                 playPromise
                 .then(_ => {
@@ -67,17 +60,18 @@ class DrumPad extends React.Component {
     
 
     renderDrumPads = () => {
-        
         return (
             this.props.drumSamples.map((drumSample) => {
                 return (
-                    <div 
-                        onClick={() => this.props.selectDrumPad(drumSample)}
-                        key={drumSample.keyTrigger}
-                        className="drum-pad"
-                    >
-                        {drumSample.keyTrigger}
-                        <audio className="clip" id={drumSample.keyTrigger} src={this.getSrc() ? this.getSrc().url : null} />
+                    <div className="drum-pad-col col-md-4">
+                        <div 
+                            onClick={() => this.props.selectDrumPad(drumSample)}
+                            key={drumSample.keyTrigger}
+                            className={`drum-pad btn ${this.props.poweredOn ? "btn-primary" : "btn-secondary"}`}
+                        >
+                            {drumSample.keyTrigger}
+                            <audio className="clip" id={drumSample.keyTrigger} src={this.getSrc() ? this.getSrc().url : null} />
+                        </div>
                     </div>
                 );
             })
@@ -86,16 +80,18 @@ class DrumPad extends React.Component {
 
     render() {
         return (
-            <div>
-                {this.renderDrumPads()}
+            <div className="drum-pad-area col-lg-6">
+                <div className="row">
+                    {this.renderDrumPads()}
+                </div>
             </div>
         )
     }
 };
 
 
-//use ownProps to pass so that when componentDidUpdate fires it only fires onClick 
-//because the only state that changes is selectedDrumPad
+//I only want componentDidUpdate to fire when selectedDrumPad is updated. This is why I need ownProps - 
+//to receive state as props from a higher level component, and to not trigger this componentDidUpdate method.
 const mapStateToProps = (state, ownProps) => {
     const { selectedDrumPad, drumSamples } = state;
     const { selectedBank, volumeSlider, poweredOn } = ownProps;
