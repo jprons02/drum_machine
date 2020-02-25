@@ -24,12 +24,18 @@ class DrumPad extends React.Component {
     }
 
     playSound = (drumSample) => {
+        if(!this.props.poweredOn) {
+            return null;
+        } 
         //call action creator to set state of selectedDrumPad
         this.props.selectDrumPad(drumSample);
 
         if(this.getSrcObj) {
             const audioElement = document.getElementById(drumSample.keyTrigger);
                 
+            //playTheSound.volume = (parseInt(this.state.sliderValue))/100;
+            //set volume
+            audioElement.volume = (parseInt(this.props.volumeSlider))/100;
             //resets audio to allow spam keypress
             audioElement.currentTime = 0;
             
