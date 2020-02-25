@@ -4,12 +4,8 @@ import { selectBank, slideVolume, togglePower } from "../actions";
 
 
 class ControlBoard extends React.Component {
-    constructor(props) {
-        super(props);
-    }
 
     render() {
-        console.log(this.props);
         return (
             <div id="display" className="display col-lg-6">
         

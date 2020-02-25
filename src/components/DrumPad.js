@@ -6,35 +6,30 @@ class DrumPad extends React.Component {
     
     componentDidMount = () => document.addEventListener('keydown', this.keyPressed);
 
-    componentDidUpdate() {
-        if(this.getSrc()) {
-            this.playSound(this.getSrc());
-        } 
-    }
-
+    
     keyPressed = (e) => {
         for(let drumSample of this.props.drumSamples) {
             if(e.keyCode === drumSample.keyCode) {
-                this.props.selectDrumPad(drumSample);
-            }
-        }
-    }
-    
-    getSrc = () => {
-        //loop through all banks to return which is equal to the bank state.
-        if(this.props.selectedDrumPad.bank) {
-            for (let bank of this.props.selectedDrumPad.bank) {
-                if(bank.bankNumber === this.props.selectedBank) {
-                    return bank;
-                }
+                this.playSound(drumSample);
             }
         }
     }
 
-    playSound = (src) => {
-        if(src) {
-            const audioElement = document.getElementById(this.props.selectedDrumPad.keyTrigger);
-            
+    getSrcObj = drumSample => {
+        for (let bank of drumSample.bank) {
+            if(bank.bankNumber === this.props.selectedBank) {
+                return bank;
+            }
+        }
+    }
+
+    playSound = (drumSample) => {
+        //call action creator to set state of selectedDrumPad
+        this.props.selectDrumPad(drumSample);
+
+        if(this.getSrcObj) {
+            const audioElement = document.getElementById(drumSample.keyTrigger);
+                
             //resets audio to allow spam keypress
             audioElement.currentTime = 0;
             
@@ -55,7 +50,6 @@ class DrumPad extends React.Component {
                 });
             }
         }
-
     }
     
 
@@ -63,14 +57,14 @@ class DrumPad extends React.Component {
         return (
             this.props.drumSamples.map((drumSample) => {
                 return (
-                    <div className="drum-pad-col col-md-4">
+                    <div key={drumSample.keyTrigger} className="drum-pad-col col-md-4">
                         <div 
-                            onClick={() => this.props.selectDrumPad(drumSample)}
                             key={drumSample.keyTrigger}
+                            onClick={() => this.playSound(drumSample)}
                             className={`drum-pad btn ${this.props.poweredOn ? "btn-primary" : "btn-secondary"}`}
                         >
                             {drumSample.keyTrigger}
-                            <audio className="clip" id={drumSample.keyTrigger} src={this.getSrc() ? this.getSrc().url : null} />
+                            <audio className="clip" id={drumSample.keyTrigger} src={this.getSrcObj(drumSample).url || null} />
                         </div>
                     </div>
                 );
@@ -90,13 +84,8 @@ class DrumPad extends React.Component {
 };
 
 
-//I only want componentDidUpdate to fire when selectedDrumPad is updated. This is why I need ownProps - 
-//to receive state as props from a higher level component, and to not trigger this componentDidUpdate method.
-const mapStateToProps = (state, ownProps) => {
-    const { selectedDrumPad, drumSamples } = state;
-    const { selectedBank, volumeSlider, poweredOn } = ownProps;
-
-    return { selectedDrumPad, drumSamples, selectedBank, volumeSlider, poweredOn };
+const mapStateToProps = state => {
+    return state;
 }
 
 
